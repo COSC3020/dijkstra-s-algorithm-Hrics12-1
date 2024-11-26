@@ -10,14 +10,19 @@ on:
 
 jobs:
   test:
-    runs-on: node:16
+    runs-on: ubuntu-latest  # Use the latest stable Ubuntu runner
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-        
+        uses: actions/checkout@v2  # Correct action to check out the code
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3  # Setup Node.js to ensure the correct version of Node.js is used
+        with:
+          node-version: '16'  # This makes sure Node 16 is used, as per your requirements
+
       - name: Install dependencies
-        run: npm install
-        
+        run: npm install  # Installs the dependencies from package.json
+
       - name: Run tests
-        run: npm test
+        run: npm test  # Runs the tests as defined in the package.json file
