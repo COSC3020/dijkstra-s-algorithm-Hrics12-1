@@ -1,0 +1,23 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: node:16
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: node code.test.js
