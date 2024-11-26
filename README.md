@@ -27,3 +27,4 @@ answer, including your reasoning, to this markdown file.
 
 
 https://www.freecodecamp.org/news/dijkstras-algorithm-explained-with-a-pseudocode-example/
+https://leetcode.com/discuss/general-discussion/851630/dijkstras-algorithm-in-javascript
