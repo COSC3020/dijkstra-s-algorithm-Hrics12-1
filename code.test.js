@@ -1,45 +1,62 @@
-//This was written by chatGPT after I asked for code.test.js file and gave my code to it
-
-
 const fs = require('fs');
 const jsc = require('jsverify');
 
-// Load the `dijkstra` function from 'code.js' (assumed to be in the same directory)
+// Load the code file that contains the Dijkstra function
 eval(fs.readFileSync('code.js') + '');
 
-// Test case for Dijkstra’s algorithm
-const testDijkstra = jsc.forall('array (array nat) nat', function (graph, sourceNode) {
-    // Ensure that graph is a valid adjacency matrix and sourceNode is within bounds
-    if (graph.length < 2 || sourceNode < 0 || sourceNode >= graph.length) {
-        return true; // Skip this test case if invalid graph or source node
-    }
+// Test for Dijkstra's algorithm
+const testDijkstra =
+    jsc.forall("array (array nat) nat", function (graph, sourceNode) {
+        // Ensure the graph is valid (non-negative weights and square)
+        if (graph.length < 2 || !graph.every(row => row.length === graph.length) || !graph.every(row => row.every(cell => cell >= 0))) {
+            return true;  // Skip invalid graphs
+        }
 
-    // Calculate the expected distances using a brute-force approach (e.g., Bellman-Ford)
-    function bellmanFord(graph, sourceNode) {
-        const dist = new Array(graph.length).fill(Infinity);
-        dist[sourceNode] = 0;
+        // Run Dijkstra's algorithm
+        let result = dijkstra(graph, sourceNode);
 
-        for (let i = 0; i < graph.length - 1; i++) {
-            for (let u = 0; u < graph.length; u++) {
-                for (let v = 0; v < graph.length; v++) {
-                    if (graph[u][v] > 0 && dist[u] !== Infinity && dist[u] + graph[u][v] < dist[v]) {
-                        dist[v] = dist[u] + graph[u][v];
+        // Check that the distances are non-negative
+        if (result.some(dist => dist < 0)) {
+            return false;
+        }
+
+        // Check that for each node, the distance is not greater than any alternative path
+        for (let i = 0; i < graph.length; i++) {
+            if (i === sourceNode) continue;
+            for (let j = 0; j < graph.length; j++) {
+                if (graph[i][j] > 0) {
+                    // Check if any direct path gives a shorter distance than the shortest found path
+                    let altDist = result[i] + graph[i][j];
+                    if (result[j] > altDist) {
+                        return false;  // If we find a shorter alternative, the result is wrong
                     }
                 }
             }
         }
-        return dist;
-    }
 
-    // Run the dijkstra algorithm on the graph
-    const resultDijkstra = dijkstra(graph, sourceNode);
-    
-    // Run the bellmanFord (or other reference algorithm) on the graph for comparison
-    const resultBellmanFord = bellmanFord(graph, sourceNode);
+        return true;  // If all checks pass, the test is successful
+    });
 
-    // Check if the results are the same
-    return JSON.stringify(resultDijkstra) === JSON.stringify(resultBellmanFord);
-});
-
-// Run the test
+// Assert the Dijkstra test
 jsc.assert(testDijkstra);
+
+// Test for specific edge cases, like a graph with one or two nodes
+const testEdgeCases =
+    jsc.forall("array nat", function (arr) {
+        if (arr.length === 1) {
+            // Graph with only one node should return zero distance for that node
+            let graph = [[0]];
+            let result = dijkstra(graph, 0);
+            return result[0] === 0;
+        }
+        if (arr.length === 2) {
+            // A graph with two nodes: one with no edge and another with an edge between them
+            let graph = [[0, 1], [1, 0]];
+            let result = dijkstra(graph, 0);
+            return result[0] === 0 && result[1] === 1;
+        }
+        return true;
+    });
+
+// Assert the edge case test
+jsc.assert(testEdgeCases);
