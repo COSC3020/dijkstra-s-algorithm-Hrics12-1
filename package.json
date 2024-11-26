@@ -1,0 +1,10 @@
+{
+  "name": "dijkstra-tests",
+  "version": "1.0.0",
+  "dependencies": {
+    "jsverify": "^0.8.0"
+  },
+  "scripts": {
+    "test": "node code.test.js"
+  }
+}
