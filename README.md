@@ -24,6 +24,8 @@ inefficient.
 What is the big $\Theta$ complexity of your implementation? Add your
 answer, including your reasoning, to this markdown file.
 
+Both arrays (dist,vistedNodes) initializes in $O(n)$ time for n being the nodes in the graph. The while loop could run n times for each node as a worse case. The first for loop scans all the nodes ot find the ones that haven't been visted yet with the smallest distance, this happens each iteration of the while loop, so that's $O(n)$ time. The the second for loop checks the nodes neighboring the node with the smallest distance from the first for loop. This also runs $O(n)$ times for each iteration of the while loop. So you have the while loop at $O(n)$, the first and second for loops at $O(n)$ for each. This gives you $O(n)*O(n)+O(n)*O(n)$= $O(n^2)$. Then the time complexety would be $\Theta(n^2)$.
+
 
 code.test.js was written by chatGPT after I asked for code.test.js file and gave my code to it, after I gave it the code.test.js from "pancake sort" as an example.
 
