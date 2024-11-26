@@ -25,7 +25,7 @@ What is the big $\Theta$ complexity of your implementation? Add your
 answer, including your reasoning, to this markdown file.
 
 
-code.test.js was written by chatGPT after I asked for code.test.js file and gave my code to it
+code.test.js was written by chatGPT after I asked for code.test.js file and gave my code to it, after I gave it the code.test.js from "pancake sort" as an example.
 
 
 https://www.freecodecamp.org/news/dijkstras-algorithm-explained-with-a-pseudocode-example/
